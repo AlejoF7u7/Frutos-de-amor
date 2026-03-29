@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:15
+    container_name: clinica-db
+    environment:
+      POSTGRES_USER: Alejo
+      POSTGRES_PASSWORD: Alejo123#
+      POSTGRES_DB: clinica_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./clinica-backend
+    container_name: clinica-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: Alejo
+      DB_PASSWORD: Alejo123#
+      DB_NAME: clinica_db
+
+  frontend:
+    build: ./clinica-rehab
+    container_name: clinica-web
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
